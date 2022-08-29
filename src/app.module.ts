@@ -16,9 +16,9 @@ import { getMongoConfig } from './configs/mongo.config';
       useFactory: getMongoConfig,
     }),
     AuthModule,
-    TopPageModule,
     ProductModule,
     ReviewModule,
+    TopPageModule,
   ],
 })
 export class AppModule {}
