@@ -1,6 +1,6 @@
 import { Prop } from '@nestjs/mongoose';
 
-export class BaseModel {
+export class Timestamps {
   @Prop()
   createdAt: Date;
 

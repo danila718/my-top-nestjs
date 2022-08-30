@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { BaseModel } from '../common/base.model';
-import { Product } from '../product/product.model';
+import { Timestamps } from '../../common/schemas/timestamps.schema';
+import { Product } from '../../product/schemas/product.schema';
 
 @Schema({ timestamps: true })
-export class Review extends BaseModel {
+export class Review extends Timestamps {
   // _id: string;
   @Prop()
   name: string;
@@ -21,5 +21,7 @@ export class Review extends BaseModel {
   @Prop({ type: Types.ObjectId, ref: Product.name })
   product: Product;
 }
+
 export type ReviewDocument = Review & Document;
+
 export const ReviewSchema = SchemaFactory.createForClass(Review);

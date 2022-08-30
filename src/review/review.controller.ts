@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { REVIEW_ERROR_NOT_FOUND } from './review.messages';
-import { Review } from './review.model';
 import { ReviewService } from './review.service';
+import { Review } from './schemas/review.schema';
 
 @Controller('review')
 export class ReviewController {

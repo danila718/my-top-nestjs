@@ -1,5 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { Timestamps } from '../../common/schemas/timestamps.schema';
+import { TopPageAdvantage, TopPageAdvantageSchema } from './top-page-advantage.schema';
+import { TopPageHh, TopPageHhSchema } from './top-page-hh.schema';
 
 export enum TopLevelCategory {
   Courses,
@@ -9,35 +12,7 @@ export enum TopLevelCategory {
 }
 
 @Schema({ timestamps: true })
-export class TopPageHh {
-  @Prop()
-  count: number;
-
-  @Prop()
-  juniorSalary: number;
-
-  @Prop()
-  middleSalary: number;
-
-  @Prop()
-  seniorSalary: number;
-}
-export type TopPageHhDocument = TopPageHh & Document;
-export const TopPageHhSchema = SchemaFactory.createForClass(TopPageHh);
-
-@Schema({ timestamps: true })
-export class TopPageAdvantage {
-  @Prop()
-  title: string;
-
-  @Prop()
-  description: string;
-}
-export type TopPageAdvantageDocument = TopPageAdvantage & Document;
-export const TopPageAdvantageSchema = SchemaFactory.createForClass(TopPageAdvantage);
-
-@Schema({ timestamps: true })
-export class TopPage {
+export class TopPage extends Timestamps {
   // _id: string;
   @Prop({ enum: TopLevelCategory })
   firstCategory: TopLevelCategory;
@@ -54,7 +29,7 @@ export class TopPage {
   @Prop()
   category: string;
 
-  @Prop({ type: TopPageAdvantageSchema, _id: false })
+  @Prop({ type: TopPageHhSchema, _id: false })
   hh?: TopPageHh;
 
   @Prop({ type: [TopPageAdvantageSchema], _id: false })
@@ -69,5 +44,7 @@ export class TopPage {
   @Prop({ type: [String] })
   tags: string[];
 }
+
 export type TopPageDocument = TopPage & Document;
+
 export const TopPageSchema = SchemaFactory.createForClass(TopPage);
