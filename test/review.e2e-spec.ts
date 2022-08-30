@@ -37,6 +37,13 @@ describe('Review (e2e)', () => {
     createdId = res.body._id;
   });
 
+  it('/review/create (POST) - fail', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/review/create')
+      .send({ ...testDto, rating: 0 });
+    expect(res.statusCode).toBe(400);
+  });
+
   it('/review/byProduct/:productId (GET) - success', async () => {
     const res = await request(app.getHttpServer()).get('/review/byProduct/' + product);
     expect(res.statusCode).toBe(200);
