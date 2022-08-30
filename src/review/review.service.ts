@@ -8,16 +8,16 @@ import { Review, ReviewDocument } from './schemas/review.schema';
 export class ReviewService {
   constructor(@InjectModel(Review.name) private readonly review: Model<ReviewDocument>) {}
 
-  async create(createdReviewDto: CreateReviewDto): Promise<Review> {
+  async create(createdReviewDto: CreateReviewDto): Promise<ReviewDocument> {
     const createdReview = new this.review(createdReviewDto);
     return createdReview.save();
   }
 
-  async delete(id: string): Promise<Review | null> {
+  async delete(id: string): Promise<ReviewDocument | null> {
     return this.review.findByIdAndDelete(id).exec();
   }
 
-  async findByProductId(productId: string): Promise<Review[]> {
+  async findByProductId(productId: string): Promise<ReviewDocument[]> {
     return this.review.find({ product: new Types.ObjectId(productId) }).exec();
   }
 
