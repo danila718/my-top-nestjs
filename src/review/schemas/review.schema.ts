@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Timestamps } from '../../common/schemas/timestamps.schema';
 import { Product } from '../../product/schemas/product.schema';
 
@@ -18,7 +18,7 @@ export class Review extends Timestamps {
   @Prop()
   rating: number;
 
-  @Prop({ type: Types.ObjectId, ref: Product.name })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: Product.name })
   product: Product;
 }
 
