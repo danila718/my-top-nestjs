@@ -1,26 +1,25 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { AdminDto } from './dto/admin-dto';
 import { Admin, AdminDocument } from './schemas/admin.schema';
 import { compare, genSalt, hash } from 'bcryptjs';
-import { sign } from 'jsonwebtoken';
-import { ConfigService } from '@nestjs/config';
+import { ERROR_ADMIN_INVALID_PASSWORD, ERROR_ADMIN_NOT_FOUND } from './admin.messages';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AdminService {
   constructor(
     @InjectModel(Admin.name) private readonly admin: Model<AdminDocument>,
-    private readonly configServce: ConfigService,
+    private readonly jwtService: JwtService,
   ) {}
 
-  async createUser({ login, password }: AdminDto): Promise<AdminDocument | null> {
-    const existAdmin = await this.findUser(login);
+  async createUser(email: string, password: string): Promise<AdminDocument | null> {
+    const existAdmin = await this.findUser(email);
     if (existAdmin) {
       return null;
     }
     const newAdmin = new this.admin({
-      email: login,
+      email,
       passwordHash: await hash(password, await genSalt(10)),
     });
 
@@ -28,40 +27,26 @@ export class AdminService {
   }
 
   async findUser(email: string): Promise<AdminDocument | null> {
-    return this.admin.findOne({ email: email }).exec();
+    return this.admin.findOne({ email }).exec();
   }
 
-  async validateUser({ login, password }: AdminDto): Promise<boolean> {
-    const existAdmin = await this.findUser(login);
+  async validateUser(email: string, password: string): Promise<Pick<Admin, 'email'>> {
+    const existAdmin = await this.findUser(email);
     if (!existAdmin) {
-      return false;
+      throw new UnauthorizedException(ERROR_ADMIN_NOT_FOUND);
     }
 
-    return compare(password, existAdmin.passwordHash);
+    const isValidPassword = await compare(password, existAdmin.passwordHash);
+    if (!isValidPassword) {
+      throw new UnauthorizedException(ERROR_ADMIN_INVALID_PASSWORD);
+    }
+    return { email: existAdmin.email };
   }
 
-  async login(email: string): Promise<string> {
-    const secret = this.configServce.get('SECRET');
-    if (!secret) {
-      throw new InternalServerErrorException(`Can not get secret key`);
-    }
-    return new Promise<string>((resolve, reject) => {
-      sign(
-        {
-          email,
-          iat: Math.floor(Date.now() / 1000),
-        },
-        secret,
-        {
-          algorithm: 'HS256',
-        },
-        (err, jwt) => {
-          if (err) {
-            reject(err);
-          }
-          resolve(jwt as string);
-        },
-      );
-    });
+  async login(email: string) {
+    const payload = { email };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 }

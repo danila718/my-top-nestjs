@@ -5,11 +5,10 @@ import {
   HttpCode,
   InternalServerErrorException,
   Post,
+  UnauthorizedException,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { sign } from 'jsonwebtoken';
 import { ERROR_ADMIN_EXIST, ERROR_ADMIN_LOGIN } from './admin.messages';
 import { AdminService } from './admin.service';
 import { AdminDto } from './dto/admin-dto';
@@ -21,8 +20,8 @@ export class AdminController {
 
   @UsePipes(new ValidationPipe())
   @Post('register')
-  async register(@Body() adminDto: AdminDto): Promise<AdminDocument> {
-    const res = await this.adminService.createUser(adminDto);
+  async register(@Body() { email, password }: AdminDto): Promise<AdminDocument> {
+    const res = await this.adminService.createUser(email, password);
     if (!res) {
       throw new BadRequestException(ERROR_ADMIN_EXIST);
     }
@@ -32,12 +31,8 @@ export class AdminController {
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post('login')
-  async login(@Body() adminDto: AdminDto): Promise<{ token: string }> {
-    const res = await this.adminService.validateUser(adminDto);
-    if (!res) {
-      throw new BadRequestException(ERROR_ADMIN_LOGIN);
-    }
-    const jwt = await this.adminService.login(adminDto.login);
-    return { token: jwt };
+  async login(@Body() { email, password }: AdminDto): Promise<{ access_token: string }> {
+    const validAdminEmail = await this.adminService.validateUser(email, password);
+    return this.adminService.login(email);
   }
 }

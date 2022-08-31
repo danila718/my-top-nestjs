@@ -1,0 +1,132 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2022-08-31T06:56:50.842Z",
+  "__export_source": "insomnia.desktop.app:v2022.4.2",
+  "resources": [
+    {
+      "_id": "req_6759ca55df5e4d29b664d965c4e27b30",
+      "parentId": "fld_9d349d64cf22437b82e8836f8ffe29e1",
+      "modified": 1661928899668,
+      "created": 1661928630861,
+      "url": "{{ _.host }}/admin/login",
+      "name": "Login",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"email\": \"danila718@gmail.com\",\n\t\"password\": \"qwerty\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_0092812556be42a38580597771627982"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1661928630861,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_9d349d64cf22437b82e8836f8ffe29e1",
+      "parentId": "wrk_f1337cbecc614315bbdda5677bc34c0f",
+      "modified": 1661928243924,
+      "created": 1661928243924,
+      "name": "Admin",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1661928243924,
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_f1337cbecc614315bbdda5677bc34c0f",
+      "parentId": null,
+      "modified": 1661928231270,
+      "created": 1661928231270,
+      "name": "My-top-api NestJS",
+      "description": "",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "req_c56d65e9065f4d16bc4b6dc1d45304a5",
+      "parentId": "fld_9d349d64cf22437b82e8836f8ffe29e1",
+      "modified": 1661928669953,
+      "created": 1661928247120,
+      "url": "{{ _.host }}/admin/register",
+      "name": "Register",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"email\": \"danila7181@gmail.com\",\n\t\"password\": \"qwerty\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_7b02b40095424d27940ad81a437e96d8"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1661928247120,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "env_ddd09fa7651d375f47fcdcfa23570ad5bc066b47",
+      "parentId": "wrk_f1337cbecc614315bbdda5677bc34c0f",
+      "modified": 1661928419460,
+      "created": 1661928231275,
+      "name": "Base Environment",
+      "data": {
+        "host": "http://localhost:3000/api"
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "host"
+        ]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1661928231275,
+      "_type": "environment"
+    },
+    {
+      "_id": "jar_ddd09fa7651d375f47fcdcfa23570ad5bc066b47",
+      "parentId": "wrk_f1337cbecc614315bbdda5677bc34c0f",
+      "modified": 1661928231277,
+      "created": 1661928231277,
+      "name": "Default Jar",
+      "cookies": [],
+      "_type": "cookie_jar"
+    },
+    {
+      "_id": "spc_160b98b9df5b44adbc34e96edaacbc33",
+      "parentId": "wrk_f1337cbecc614315bbdda5677bc34c0f",
+      "modified": 1661928231271,
+      "created": 1661928231271,
+      "fileName": "My-top-api NestJS",
+      "contents": "",
+      "contentType": "yaml",
+      "_type": "api_spec"
+    }
+  ]
+}

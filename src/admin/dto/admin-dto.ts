@@ -1,8 +1,9 @@
-import { IsString } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
 export class AdminDto {
+  @IsEmail()
   @IsString()
-  login: string;
+  email: string;
 
   @IsString()
   password: string;
