@@ -5,7 +5,7 @@ import { ReviewModule } from './review/review.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { getMongoConfig } from './configs/mongo.config';
-import { AdminModule } from './admin/admin.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { AdminModule } from './admin/admin.module';
       inject: [ConfigService],
       useFactory: getMongoConfig,
     }),
-    AdminModule,
+    AuthModule,
     ProductModule,
     ReviewModule,
     TopPageModule,

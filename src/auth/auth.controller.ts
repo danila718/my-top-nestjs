@@ -3,25 +3,23 @@ import {
   Body,
   Controller,
   HttpCode,
-  InternalServerErrorException,
   Post,
-  UnauthorizedException,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ERROR_ADMIN_EXIST, ERROR_ADMIN_LOGIN } from './admin.messages';
-import { AdminService } from './admin.service';
+import { ERROR_ADMIN_EXIST } from './auth.messages';
+import { AuthService } from './auth.service';
 import { AdminDto } from './dto/admin-dto';
 import { AdminDocument } from './schemas/admin.schema';
 
-@Controller('admin')
-export class AdminController {
-  constructor(private readonly adminService: AdminService) {}
+@Controller('auth')
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
 
   @UsePipes(new ValidationPipe())
   @Post('register')
   async register(@Body() { email, password }: AdminDto): Promise<AdminDocument> {
-    const res = await this.adminService.createUser(email, password);
+    const res = await this.authService.createUser(email, password);
     if (!res) {
       throw new BadRequestException(ERROR_ADMIN_EXIST);
     }
@@ -32,7 +30,7 @@ export class AdminController {
   @HttpCode(200)
   @Post('login')
   async login(@Body() { email, password }: AdminDto): Promise<{ access_token: string }> {
-    const validAdminEmail = await this.adminService.validateUser(email, password);
-    return this.adminService.login(email);
+    const validAdmin = await this.authService.validateUser(email, password);
+    return this.authService.login(validAdmin.email);
   }
 }

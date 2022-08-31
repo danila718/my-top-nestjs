@@ -3,11 +3,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Admin, AdminDocument } from './schemas/admin.schema';
 import { compare, genSalt, hash } from 'bcryptjs';
-import { ERROR_ADMIN_INVALID_PASSWORD, ERROR_ADMIN_NOT_FOUND } from './admin.messages';
+import { ERROR_ADMIN_INVALID_PASSWORD, ERROR_ADMIN_NOT_FOUND } from './auth.messages';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
-export class AdminService {
+export class AuthService {
   constructor(
     @InjectModel(Admin.name) private readonly admin: Model<AdminDocument>,
     private readonly jwtService: JwtService,
