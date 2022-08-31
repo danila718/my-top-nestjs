@@ -8,8 +8,8 @@ import { Review, ReviewDocument } from './schemas/review.schema';
 export class ReviewService {
   constructor(@InjectModel(Review.name) private readonly review: Model<ReviewDocument>) {}
 
-  async create(createdReviewDto: CreateReviewDto): Promise<ReviewDocument> {
-    const createdReview = new this.review(createdReviewDto);
+  async create(createReviewDto: CreateReviewDto): Promise<ReviewDocument> {
+    const createdReview = new this.review(createReviewDto);
     return createdReview.save();
   }
 

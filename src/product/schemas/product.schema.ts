@@ -19,13 +19,10 @@ export class Product extends Timestamps {
   price: number;
 
   @Prop()
-  oldPrice: number;
+  oldPrice?: number;
 
   @Prop()
   credit: number;
-
-  @Prop()
-  calculatedRating: number;
 
   @Prop()
   description: string;
@@ -42,7 +39,7 @@ export class Product extends Timestamps {
   @Prop([String])
   tags: string[];
 
-  @Prop({ type: [ProductCharacteristicSchema] })
+  @Prop({ type: [ProductCharacteristicSchema], _id: false })
   characteristics: ProductCharacteristic[];
 }
 
