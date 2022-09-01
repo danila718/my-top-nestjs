@@ -59,7 +59,10 @@ export class ProductController {
     return updatedProduct;
   }
 
+  @UsePipes(new ValidationPipe())
   @HttpCode(200)
-  @Post()
-  async find(@Body() findProductDto: FindProductDto): Promise<void> {}
+  @Post('find')
+  async find(@Body() findProductDto: FindProductDto) {
+    return this.productService.findWithReviews(findProductDto);
+  }
 }

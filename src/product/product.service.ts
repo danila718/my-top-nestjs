@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { plainToInstance } from 'class-transformer';
 import { Model } from 'mongoose';
+import { ReviewDocument } from '../review/schemas/review.schema';
 import { CreateProductDto } from './dto/create-product.dto';
+import { FindProductDto } from './dto/find-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product, ProductDocument } from './schemas/product.schema';
 
@@ -28,5 +29,43 @@ export class ProductService {
     updateProductDto: UpdateProductDto,
   ): Promise<ProductDocument | null> {
     return this.product.findByIdAndUpdate(id, updateProductDto, { new: true });
+  }
+
+  async findWithReviews(findProductDto: FindProductDto) {
+    return (await this.product
+      .aggregate([
+        {
+          $match: {
+            categories: findProductDto.category,
+          },
+        },
+        {
+          $sort: {
+            _id: 1,
+          },
+        },
+        {
+          $limit: findProductDto.limit,
+        },
+        {
+          $lookup: {
+            from: 'reviews',
+            localField: '_id',
+            foreignField: 'product',
+            as: 'reviews',
+          },
+        },
+        {
+          $addFields: {
+            reviewCount: { $size: '$reviews' },
+            reviewAvg: { $avg: '$reviews.rating' },
+          },
+        },
+      ])
+      .exec()) as (ProductDocument & {
+      review: ReviewDocument[];
+      reviewCount: number;
+      reviewAvg: number;
+    })[];
   }
 }
