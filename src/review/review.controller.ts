@@ -12,6 +12,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { IdValidationPipe } from '../pipes/id-validation.pipe';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { REVIEW_ERROR_NOT_FOUND } from './review.messages';
 import { ReviewService } from './review.service';
@@ -28,13 +29,15 @@ export class ReviewController {
   }
 
   @Get('byProduct/:productId')
-  async getByProduct(@Param('productId') productId: string): Promise<ReviewDocument[]> {
+  async getByProduct(
+    @Param('productId', IdValidationPipe) productId: string,
+  ): Promise<ReviewDocument[]> {
     return this.reviewService.findByProductId(productId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async delete(@Param('id') id: string): Promise<void> {
+  async delete(@Param('id', IdValidationPipe) id: string): Promise<void> {
     const deletedReview = await this.reviewService.delete(id);
     if (!deletedReview) {
       throw new HttpException(REVIEW_ERROR_NOT_FOUND, HttpStatus.NOT_FOUND);
