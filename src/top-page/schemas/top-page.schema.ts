@@ -5,7 +5,7 @@ import { TopPageAdvantage, TopPageAdvantageSchema } from './top-page-advantage.s
 import { TopPageHh, TopPageHhSchema } from './top-page-hh.schema';
 
 export enum TopLevelCategory {
-  Courses,
+  Courses = 1,
   Services,
   Books,
   Products,
@@ -20,7 +20,7 @@ export class TopPage extends Timestamps {
   @Prop()
   secondCategory: string;
 
-  @Prop()
+  @Prop({ unique: true })
   alias: string;
 
   @Prop()
