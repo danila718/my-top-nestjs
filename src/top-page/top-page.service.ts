@@ -35,9 +35,35 @@ export class TopPageService {
   }
 
   async findByFirstCategory({ firstCategory }: FindTopPageDto): Promise<TopPageDocument[]> {
-    return this.topPage
-      .find({ firstCategory }, { alias: 1, secondCategory: 1, title: 1, seoText: 1 })
-      .exec();
+    return (
+      this.topPage
+        // old find
+        // .find({ firstCategory }, { alias: 1, secondCategory: 1, title: 1, seoText: 1 })
+
+        // with aggregate array
+        // .aggregate([
+        //   {
+        //     $match: {
+        //       firstCategory,
+        //     },
+        //   },
+        //   {
+        //     $group: {
+        //       _id: { secondCategory: '$secondCategory' },
+        //       pages: { $push: { alias: '$alias', title: '$title', seoText: '$seoText' } },
+        //     },
+        //   },
+        // ])
+
+        // second variant
+        .aggregate()
+        .match({ firstCategory })
+        .group({
+          _id: '$secondCategory',
+          pages: { $push: { alias: '$alias', title: '$title', seoText: '$seoText' } },
+        })
+        .exec()
+    );
   }
 
   async findByText(text: string): Promise<TopPageDocument[]> {
