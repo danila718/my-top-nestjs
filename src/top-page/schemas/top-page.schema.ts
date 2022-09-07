@@ -48,3 +48,5 @@ export class TopPage extends Timestamps {
 export type TopPageDocument = TopPage & Document;
 
 export const TopPageSchema = SchemaFactory.createForClass(TopPage);
+// TopPageSchema.index({ title: 'text', seoText: 'text' });
+TopPageSchema.index({ '$**': 'text' });

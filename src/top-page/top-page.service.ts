@@ -35,7 +35,13 @@ export class TopPageService {
   }
 
   async findByFirstCategory({ firstCategory }: FindTopPageDto): Promise<TopPageDocument[]> {
-    return this.topPage.find({ firstCategory }, { alias: 1, secondCategory: 1, title: 1 }).exec();
+    return this.topPage
+      .find({ firstCategory }, { alias: 1, secondCategory: 1, title: 1, seoText: 1 })
+      .exec();
+  }
+
+  async findByText(text: string): Promise<TopPageDocument[]> {
+    return this.topPage.find({ $text: { $search: text, $caseSensitive: false } }).exec();
   }
 
   async findAll(limit: number): Promise<TopPageDocument[]> {
